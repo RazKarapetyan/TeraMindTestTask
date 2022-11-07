@@ -5,7 +5,11 @@
 
 namespace {
 
+// NOTE !!!
+// For interprocess communication i must use some low level IPC mechanism, for instance sockets, 
+// but shared file should be the easiest one.
 void writeToSharedSegment(const std::string& data) {
+    const std::lock_guard<std::mutex> lock(g_mutex);
     std::ofstream sharedSegment;
     sharedSegment.open (SharedDataPath);
     if(!sharedSegment.is_open()) {
@@ -16,6 +20,7 @@ void writeToSharedSegment(const std::string& data) {
 }
 
 void readFromSharedSegment() {
+    const std::lock_guard<std::mutex> lock(g_mutex);
     std::ifstream sharedSegment;
     sharedSegment.open (SharedDataPath);
     if(!sharedSegment.is_open()) {
