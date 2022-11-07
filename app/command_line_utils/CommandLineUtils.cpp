@@ -13,7 +13,7 @@ std::tuple<bool, std::string> CommandLineUtils::parse(int argc, const char* argv
         description.add_options()("help,h", "Display help message")
             ("producer,p", po::bool_switch()->default_value(false), "Act as a producer")
             ("client,c",  po::bool_switch()->default_value(false), "Act as a client")
-            ("input-text,t", po::value<std::string>(&inputText)->default_value(""), "Input text");
+            ("input-text,t", po::value<std::string>(&inputText)->required(), "Input text");
 
         po::variables_map vm;
         po::store(po::command_line_parser(argc, argv).options(description).run(), vm);
@@ -33,6 +33,11 @@ std::tuple<bool, std::string> CommandLineUtils::parse(int argc, const char* argv
         
         if (isProducer && isClient) {
             std::cerr << "Command line arguments parsing error: please specify one kind of mode" << std::endl;
+            return {};
+        }
+
+        if (!isProducer && !isClient) {
+            std::cerr << "Command line arguments parsing error: please specify opeating mode" << std::endl;
             return {};
         }
 
