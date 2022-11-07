@@ -8,7 +8,12 @@ namespace {
 // NOTE !!!
 // For interprocess communication i must use some low level IPC mechanism, for instance sockets, 
 // but shared file should be the easiest one.
-void writeToSharedSegment(const std::string& data) {
+void writeToSharedSegment(std::string data) {
+    
+    if(data.empty()) {
+        data = "Hello world!";
+    }
+
     const std::lock_guard<std::mutex> lock(g_mutex);
     std::ofstream sharedSegment;
     sharedSegment.open (SharedDataPath);
