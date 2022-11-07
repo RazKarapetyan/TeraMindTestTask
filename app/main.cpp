@@ -6,7 +6,7 @@
 namespace {
 
 // NOTE !!!
-// For interprocess communication i must use some low level IPC mechanism, for instance sockets, 
+// For interprocess communication it would be nice to use some low level IPC mechanism, for instance sockets,
 // but shared file should be the easiest one.
 void writeToSharedSegment(std::string data) {
     
@@ -20,6 +20,7 @@ void writeToSharedSegment(std::string data) {
     if(!sharedSegment.is_open()) {
         std::cerr << "File is not opened" << std::endl;
     }
+    // TODO! Schedule timer to write every 2 seconds
     sharedSegment << data;
     sharedSegment.close();
 }
